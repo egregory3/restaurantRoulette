@@ -28,19 +28,20 @@ ImageView animatedTV;
             //Will play a sound eventually while animation runs
             @Override
             public void onAnimationStart(Animation animation) {
-
+                //Play sound here
             }
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                Intent intent = new Intent(getApplicationContext(), theRules.class);
+                Intent intent = new Intent(getApplicationContext(), TheRules.class);
+                //Stop sound before firing intent
                 startActivity(intent);
 
             }
             //required
             @Override
             public void onAnimationRepeat(Animation animation) {
-
+                //non-repeating
             }
         });
     }

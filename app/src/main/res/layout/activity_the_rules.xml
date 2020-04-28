@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".theRules"
+    tools:context=".TheRules"
     android:background="@android:color/black"
     android:textAlignment="center">
 
@@ -12,7 +12,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:id="@+id/wv_rules"
-    android:text="This is where the rules will go, click the roulette wheel below to continue"
+    android:text="@string/Rules"
     android:textColor="@android:color/holo_red_light"
     android:textSize="30sp"
     app:layout_constraintTop_toTopOf="parent"
