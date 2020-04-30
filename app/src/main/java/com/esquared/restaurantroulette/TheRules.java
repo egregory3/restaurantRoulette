@@ -13,8 +13,9 @@ ImageButton button;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_the_rules);
-        button = findViewById(R.id.btn_rouletteWheel);
 
+        //Setup button
+        button = findViewById(R.id.btn_rouletteWheel);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

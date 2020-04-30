@@ -1,7 +1,11 @@
 package com.esquared.restaurantroulette;
 
 
-public class Restaurant {
+import android.os.AsyncTask;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+public class Restaurant extends AppCompatActivity{
     private String placeId;
     private String name;
     private double lattitude;
@@ -18,6 +22,9 @@ public class Restaurant {
     private String formattedPhone;
     private double rating;
 
+    public Restaurant(){
+
+    }
     public Restaurant(String name, String placeId, double lattitude, double longitude, boolean openNow, boolean isOperational){
         this.name = name;
         this.placeId = placeId;
