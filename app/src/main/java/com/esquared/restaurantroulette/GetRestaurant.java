@@ -2,9 +2,7 @@ package com.esquared.restaurantroulette;
 
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.renderscript.ScriptGroup;
 import android.util.Log;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -16,12 +14,15 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 
 import javax.net.ssl.HttpsURLConnection;
 
 
-public class GetRestaurant extends AsyncTask<String, Void, Void> {
-
+public class GetRestaurant extends AsyncTask<String, Void, ArrayList<Restaurant>> {
+    ArrayList<Restaurant> Restaurants;
+    Restaurant curRestaurant;
+    String placeId;
 URL url;
 HttpsURLConnection connection;
 InputStream input;
@@ -36,7 +37,7 @@ String RestaurantToGet;
 String apiKey;
 
     @Override
-        protected Void doInBackground(String... params) {
+        protected ArrayList<Restaurant> doInBackground(String... params) {
         Uri.Builder builder = Uri.parse("https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=-33.8670522,151.1957362&radius=1500&type=restaurant").buildUpon();
         builder.appendQueryParameter("key", params[1]);
 
@@ -93,16 +94,19 @@ String apiKey;
 
         for(int i=0; i < 1; i++){
             try {
-                jsonobject = results.getJSONObject(Integer.valueOf(RestaurantToGet));
+                jsonobject = results.getJSONObject(Integer.valueOf(i));
                 Log.i("RESTAURANT FIRST LINE", "Get JSONObject");
             } catch (JSONException e) {
                 e.printStackTrace();
                 Log.i("RESTAURANT FIRST LINE", "Failed to get JSONObject " + e.getMessage());
             }
-            for(int j=0; j<1; j++){
+            for(int j=0; j<results.length(); j++){
                 try {
-                    JSONObject restaurant = results.getJSONObject(Integer.valueOf(RestaurantToGet));
+                    JSONObject restaurant = results.getJSONObject(Integer.valueOf(j));
                     name = restaurant.get("name").toString();
+                    placeId = restaurant.get("place_id").toString();
+
+                    curRestaurant = new Restaurant(name, placeId);
                     Log.i("Restaurant", "Created JSON Restaurant " + name);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -110,6 +114,11 @@ String apiKey;
                 }
             }
         }
-        return null;
+        return Restaurants;
     };
+
+    @Override
+    protected void onPostExecute(ArrayList<Restaurant> restaurants) {
+        super.onPostExecute(restaurants);
+    }
 }

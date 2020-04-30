@@ -25,12 +25,9 @@ public class Restaurant extends AppCompatActivity{
     public Restaurant(){
 
     }
-    public Restaurant(String name, String placeId, double lattitude, double longitude, boolean openNow, boolean isOperational){
+    public Restaurant(String name, String placeId){
         this.name = name;
         this.placeId = placeId;
-        this.lattitude = lattitude;
-        this.longitude = longitude;
-        this.openNow = openNow;
         this.isOperational = isOperational;
     }
 

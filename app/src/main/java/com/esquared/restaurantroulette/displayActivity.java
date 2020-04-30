@@ -4,8 +4,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
+import java.util.ArrayList;
+
 public class displayActivity extends Restaurant {
 
+    ArrayList<Restaurant> restaurants;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         String apiKey = (String) getText(R.string.places_api_key);
@@ -15,6 +18,6 @@ public class displayActivity extends Restaurant {
         String[] myparams = new String[]{String.valueOf(5), apiKey};
         //Use GetRestaurant class to generate a restaurant
         GetRestaurant restaurant = new GetRestaurant();
-        restaurant.execute(myparams);
+         restaurant.execute(myparams);
     }
 }
