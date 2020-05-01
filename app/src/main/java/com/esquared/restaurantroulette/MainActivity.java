@@ -23,7 +23,7 @@ final int mPlayerLength = 0;
 
         //Setup Roulette Wheel Animation
         animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotate);
-        animatedTV = findViewById(R.id.iv_animated);
+        animatedTV = findViewById(R.id.wheel_include);
        player = MediaPlayer.create(MainActivity.this, R.raw.rouletteball5second);
        player.setLooping(false);
 

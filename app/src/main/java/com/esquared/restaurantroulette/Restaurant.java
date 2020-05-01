@@ -5,7 +5,7 @@ import android.os.AsyncTask;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class Restaurant extends AppCompatActivity{
+public class Restaurant{
     private String placeId;
     private String name;
     private double lattitude;
