@@ -3,6 +3,8 @@ package com.esquared.restaurantroulette;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+
+
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -10,7 +12,6 @@ import android.util.Log;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -20,17 +21,17 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.lang.reflect.Array;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
 import javax.net.ssl.HttpsURLConnection;
 
-public class displayActivity extends AppCompatActivity {
+public class DisplayActivity extends AppCompatActivity {
     Animation animation;
     ImageView animatedTV;
     ArrayList<Restaurant> restaurants;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         String apiKey = (String) getText(R.string.places_api_key);
@@ -52,7 +53,7 @@ public class displayActivity extends AppCompatActivity {
     }
 
     class GetRestaurant extends AsyncTask<String, Void, ArrayList<Restaurant>> {
-        ArrayList<Restaurant> Restaurants = new ArrayList<Restaurant>();
+        ArrayList<Restaurant> restaurants = new ArrayList<Restaurant>();
         Restaurant curRestaurant;
         String placeId;
         URL url;
@@ -65,54 +66,43 @@ public class displayActivity extends AppCompatActivity {
         String name;
         JSONObject restaurant;
         JSONObject jsonobject;
-        String RestaurantToGet;
+        String restaurantToGet;
         String apiKey;
+        double lat, lng;
+        Uri.Builder detailBuilder;
+        Boolean isOpen;
+        String address;
 
         @Override
         protected ArrayList<Restaurant> doInBackground(String... params) {
             Uri.Builder builder = Uri.parse("https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=-33.8670522,151.1957362&radius=1500&type=restaurant").buildUpon();
             builder.appendQueryParameter("key", params[1]);
 
-            RestaurantToGet = params[0];
-            ;
+
             try {
                 url = new URL(builder.toString());
                 Log.i("URL", "saved "+url.toString());
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-                Log.e("URL", "URL FAILED " + e.getMessage());
-                return null;
-            }
-
-            try {
                 connection = (HttpsURLConnection) url.openConnection();
                 Log.i("CONNECTION","Connected " + url.toString());
-            } catch (IOException e) {
-                e.printStackTrace();
-                Log.e("CONNECTION", "Failed to connect " + url.toString() + " " + e.getMessage());
-                return null;
-            }
-
-            try {
                 input = connection.getInputStream();
                 Log.i("Input", "INPUT STREAM SUCCESSFUL");
             } catch (IOException e) {
-                e.printStackTrace();
                 Log.e("Input", "InputStream creation failed " + e.getMessage());
                 return null;
             }
 
-            BufferedReader reader = new BufferedReader(new InputStreamReader(input));
+            BufferedReader reader2 = new BufferedReader(new InputStreamReader(input));
+            data = "";
             while(line != null){
                 try {
-                    line = reader.readLine();
+                    line = reader2.readLine();
                     data = data+line;
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    Log.e("DATA", "Failed to populate Data " + e.getMessage());
+                } catch (IOException e1) {
+                    Log.e("DATA", "Failed to populate Data " + e1.getMessage());
                     return null;
                 }
             }
+            BufferedReader reader;
             try {
                 jo = new JSONObject(data);
                 results = jo.getJSONArray("results");
@@ -134,27 +124,81 @@ public class displayActivity extends AppCompatActivity {
                 }
                 for(int j=0; j<results.length(); j++){
                     try {
-                        JSONObject restaurant = results.getJSONObject(Integer.valueOf(j));
+                        JSONObject hours;
+                        isOpen = false;
+                        restaurant = results.getJSONObject(Integer.valueOf(j));
+
                         name = restaurant.get("name").toString();
                         placeId = restaurant.get("place_id").toString();
+                        JSONObject geometry;
+                        geometry = (JSONObject) restaurant.get("geometry");
+                        JSONObject location = (JSONObject) geometry.get("location");
 
-                        //curRestaurant = new Restaurant(name, placeId);
-                        Restaurants.add(new Restaurant(name, placeId));
-                        Log.i("Restaurant", "Created JSON Restaurant " + name);
+                        lat = location.getDouble("lat");
+                        lng = location.getDouble("lng");
+                        try {
+                            hours = (JSONObject) restaurant.get("opening_hours");
+                            isOpen = (Boolean) hours.get("open_now");
+                        }catch(org.json.JSONException e){
+                            Log.i("isOpen", "Unable to set isOpen");
+                        }
+
+                        restaurants.add(new Restaurant(name, placeId, lat, lng, isOpen));
+                        Log.i("Restaurant", "Created JSON Restaurant " + name + " " + lat + "/" +lng);
                     } catch (JSONException e) {
                         e.printStackTrace();
                         Log.e("Restaurant", "Failed to create restaurant");
                     }
                 }
             }
-            return Restaurants;
-        };
+
+            for(Restaurant r: restaurants) {
+
+                detailBuilder = Uri.parse("https://maps.googleapis.com/maps/api/place/details/json").buildUpon();
+                detailBuilder.appendQueryParameter("place_id", r.getPlaceId());
+                detailBuilder.appendQueryParameter("key", params[1]);
+
+                try {
+                    URL detailURL = new URL(detailBuilder.toString());
+                    connection = (HttpsURLConnection) detailURL.openConnection();
+                    input = connection.getInputStream();
+                    BufferedReader reader1 = new BufferedReader(new InputStreamReader(input));
+                    data = "";
+                    line = "";
+                    while(line != null){
+                        try {
+                            line = reader1.readLine();
+                            data = data+line;
+                        } catch (IOException e) {
+                            Log.e("DATA", "Failed to populate Data " + e.getMessage());
+                            return null;
+                        }
+                    }
+
+                        jo = new JSONObject(data);
+                    restaurant = jo.getJSONObject("result");
+                        r.setAddress(restaurant.get("formatted_address").toString());
+                        r.setPhone(restaurant.get("formatted_phone_number").toString());
+                        r.setRating( restaurant.getDouble("rating"));
+                        r.setPrice((int) restaurant.get("price_level"));
+                        Log.i("Restaurant", "" + r.getName() + " "+ r.getFormattedAddress() + " " + r.getLattitude() + "/" + r.getLongitude() + " " + r.getRating() + " " + r.getPrice());
+
+
+                } catch (MalformedURLException e) {
+                    Log.i("RESTAURANT", ""+e.getMessage());
+                } catch (IOException e) {
+                    Log.i("RESTAURANT", ""+e.getMessage());
+                } catch (JSONException e) {
+                    Log.i("RESTAURANT", ""+e.getMessage());
+                }
+            }
+            return restaurants;
+        }
 
         @Override
         protected void onPostExecute(ArrayList<Restaurant> restaurants) {
             super.onPostExecute(restaurants);
-            Toast.makeText(getApplicationContext(), "This is a toast",Toast.LENGTH_LONG ).show();
-            //ToDo: Generate a random number, select restaurant from Restaurants ArrayList, obtain restaurant details and send to next activity
+
             animatedTV.clearAnimation();
         }
     }

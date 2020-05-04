@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".displayActivity"
+    tools:context=".DisplayActivity"
     android:background="@android:color/black">
 
 <include layout="@layout/wheel_large"

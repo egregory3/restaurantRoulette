@@ -12,7 +12,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".displayActivity"></activity>
+        <activity android:name=".DisplayActivity"></activity>
         <activity android:name=".GetPrefs" />
         <activity android:name=".TheRules" />
         <activity android:name=".MainActivity">

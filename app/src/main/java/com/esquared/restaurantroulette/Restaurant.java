@@ -1,9 +1,6 @@
 package com.esquared.restaurantroulette;
 
 
-import android.os.AsyncTask;
-
-import androidx.appcompat.app.AppCompatActivity;
 
 public class Restaurant{
     private String placeId;
@@ -12,32 +9,25 @@ public class Restaurant{
     private double longitude;
     private boolean openNow;
     private boolean isOperational;
-    private String streetNum;
-    private String street;
-    private String locality;
-    private String state;
-    private String country;
-    private String postalCode;
     private String formattedAddress;
     private String formattedPhone;
     private double rating;
+    private int price;
 
     public Restaurant(){
 
     }
-    public Restaurant(String name, String placeId){
+    public Restaurant(String name, String placeId, double lat, double lon, boolean openNow){
         this.name = name;
         this.placeId = placeId;
         this.isOperational = isOperational;
+        this.lattitude = lat;
+        this.longitude = lon;
+        this.openNow = openNow;
+        this.price = -1;
     }
 
-    public void setAddress(String streetNum, String street, String locality, String state, String country, String postalCode, String formattedAddress){
-        this.streetNum = streetNum;
-        this.street = street;
-        this.locality = locality;
-        this.state = state;
-        this.country = country;
-        this.postalCode = postalCode;
+    public void setAddress(String formattedAddress){
         this.formattedAddress = formattedAddress;
     }
 
@@ -48,6 +38,7 @@ public class Restaurant{
     public void setRating(double rating) {
         this.rating = rating;
     }
+    public void setPrice(int price){this.price = price;}
 
     String getName(){
         return this.name;
@@ -79,6 +70,7 @@ public class Restaurant{
     boolean getIsOperational(){
         return this.isOperational;
     }
+    int getPrice(){ return this.price;}
 
 
 }

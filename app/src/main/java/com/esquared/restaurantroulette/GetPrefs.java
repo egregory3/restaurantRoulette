@@ -25,7 +25,7 @@ ImageButton button;
             @Override
             //Future use
             public void onClick(View v) {
-                Intent intent = new Intent(GetPrefs.this, displayActivity.class);
+                Intent intent = new Intent(GetPrefs.this, DisplayActivity.class);
                 startActivity(intent);
             }
         });
