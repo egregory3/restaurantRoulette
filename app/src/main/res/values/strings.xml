@@ -7,5 +7,6 @@
     <string name="_50_miles">50 Miles</string>
     <string name="restaurant_n_roulette">Restaurant \n Roulette</string>
     <string name="Brought_to_you">Brought to you by \n eSquared technologies</string>
-    <string name="Rules">This is where the rules will go, click the roulette wheel below to continue</string>
+    <string name="Rules">The Rules are simple: You and your significant other, your family, or your friends need to find somewhere to eat and no one is doing a good job of picking a place.  Restaurant Roulette is your solution.
+    Each member of your group agrees to let a spin of the restaurant wheel decide where you eat tonight.  Restaurant will search restaurants in your area and return a randomly chosen option.  Enjoy your meal and hopefully find a new favorite.</string>
 </resources>
