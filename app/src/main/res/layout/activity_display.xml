@@ -6,13 +6,53 @@
     android:layout_height="match_parent"
     tools:context=".DisplayActivity"
     android:background="@android:color/black">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_title"
+        android:text="Spinning the wheel!"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/wheel_include"
+        android:textColor="@android:color/holo_red_light"
+        android:textSize="50dp"
+        android:textAlignment="center"
+        />
+    <include layout="@layout/wheel_large"
+        android:id="@+id/wheel_include"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"/>
 
-<include layout="@layout/wheel_large"
-    android:id="@+id/wheel_include"
-    app:layout_constraintTop_toTopOf="parent"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintLeft_toLeftOf="parent"
-    app:layout_constraintRight_toRightOf="parent"/>
+    <TextView
+        android:id="@+id/tv_Rname"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:textColor="@android:color/holo_red_light"
+        android:textSize="50dp"/>
+    <TextView
+        android:id="@+id/tv_Raddress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/tv_Rname"
+        app:layout_constraintBottom_toTopOf="@id/tv_Rphone"
+        android:textColor="@android:color/holo_red_light"
+        android:textSize="25dp"
+        android:autoLink="all"
+        />
+    <TextView
+        android:id="@+id/tv_Rphone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/tv_Raddress"
+        android:textColor="@android:color/holo_red_light"
+        android:textSize="25dp"
+        android:autoLink="all"
+        />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
