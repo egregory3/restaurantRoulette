@@ -55,35 +55,6 @@
         android:autoLink="all"
         />
 
-    <TextView
-        android:id="@+id/tv_Rname"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:textColor="@android:color/holo_red_light"
-        android:textSize="50dp"/>
-    <TextView
-        android:id="@+id/tv_Raddress"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/tv_Rname"
-        app:layout_constraintBottom_toTopOf="@id/tv_Rphone"
-        android:textColor="@android:color/holo_red_light"
-        android:textSize="25dp"
-        android:autoLink="all"
-        />
-    <TextView
-        android:id="@+id/tv_Rphone"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/tv_Raddress"
-        android:textColor="@android:color/holo_red_light"
-        android:textSize="25dp"
-        android:autoLink="all"
-        />
-
+   
 
 </androidx.constraintlayout.widget.ConstraintLayout>
