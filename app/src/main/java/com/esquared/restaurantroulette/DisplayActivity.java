@@ -1,3 +1,4 @@
+
 package com.esquared.restaurantroulette;
 
 import androidx.annotation.Nullable;
@@ -9,6 +10,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
@@ -29,6 +31,7 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Random;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -41,8 +44,6 @@ public class DisplayActivity extends AppCompatActivity {
     TextView tvAddress;
     TextView tvPhone;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         final String apiKey = (String) getText(R.string.places_api_key);
@@ -51,21 +52,22 @@ public class DisplayActivity extends AppCompatActivity {
         animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotateinfinite);
         animatedTV = findViewById(R.id.wheel_include);
         //using for now to pass a value to pull restaurant number #
-       client = LocationServices.getFusedLocationProviderClient(this);
-       client.getLastLocation().addOnSuccessListener(DisplayActivity.this, new OnSuccessListener<Location>() {
-           @Override
-           public void onSuccess(Location location) {
-               if(location != null){
-                   String latitude = String.valueOf(location.getLatitude());
-                   String longitude = String.valueOf(location.getLongitude());
-                   String[] myparams = new String[]{String.valueOf(5), apiKey, latitude, longitude};
-                   //Use GetRestaurant class to generate a restaurant
-                   GetRestaurant restaurant = new GetRestaurant();
-                   restaurant.execute(myparams);
-               }
-           }
-       });
+        client = LocationServices.getFusedLocationProviderClient(this);
 
+        client.getLastLocation().addOnSuccessListener(DisplayActivity.this, new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+                if(location != null) {
+                    String latitude = String.valueOf(location.getLatitude());
+                    String longitude = String.valueOf(location.getLongitude());
+                    Log.i("Location", latitude + "/" + longitude);
+                    String[] myparams = new String[]{String.valueOf(5), apiKey, latitude, longitude};
+                    //Use GetRestaurant class to generate a restaurant
+                    GetRestaurant restaurant = new GetRestaurant();
+                    restaurant.execute(myparams);
+                }
+            }
+        });
     }
 
     @Override
@@ -98,10 +100,11 @@ public class DisplayActivity extends AppCompatActivity {
         @Override
         protected ArrayList<Restaurant> doInBackground(String... params) {
             Uri.Builder builder = Uri.parse("https://maps.googleapis.com/maps/api/place/nearbysearch/json").buildUpon();
-            builder.appendQueryParameter("location", params[2] + "/" + params[3]);
-            builder.appendQueryParameter("radius", "32000");
+            builder.appendQueryParameter("location", params[2] + "," + params[3]);
+            builder.appendQueryParameter("radius", "1500");
             builder.appendQueryParameter("type", "restaurant");
             builder.appendQueryParameter("key", params[1]);
+
 
 
             try {
@@ -200,13 +203,13 @@ public class DisplayActivity extends AppCompatActivity {
                         }
                     }
 
-                        jo = new JSONObject(data);
+                    jo = new JSONObject(data);
                     restaurant = jo.getJSONObject("result");
-                        r.setAddress(restaurant.get("formatted_address").toString());
-                        r.setPhone(restaurant.get("formatted_phone_number").toString());
-                        r.setRating( restaurant.getDouble("rating"));
-                        r.setPrice((int) restaurant.get("price_level"));
-                        Log.i("Restaurant", "" + r.getName() + " "+ r.getFormattedAddress() + " " + r.getLattitude() + "/" + r.getLongitude() + " " + r.getRating() + " " + r.getPrice());
+                    r.setAddress(restaurant.get("formatted_address").toString());
+                    r.setPhone(restaurant.get("formatted_phone_number").toString());
+                    r.setRating( restaurant.getDouble("rating"));
+                    r.setPrice((int) restaurant.get("price_level"));
+                    Log.i("Restaurant", "" + r.getName() + " "+ r.getFormattedAddress() + " " + r.getLattitude() + "/" + r.getLongitude() + " " + r.getRating() + " " + r.getPrice());
 
 
                 } catch (MalformedURLException e) {
@@ -222,9 +225,25 @@ public class DisplayActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(ArrayList<Restaurant> restaurants) {
+            Restaurant restaurant = new Restaurant();
             super.onPostExecute(restaurants);
+            boolean isOpen = false;
+            while(isOpen == false) {
+                Integer random = new Random().nextInt(20);
+                restaurant = restaurants.get(random);
+                Log.i("Restaurant", restaurant.getName());
+                isOpen = restaurant.getOpenNow();
+            }
 
             animatedTV.clearAnimation();
+            animatedTV.setVisibility(View.INVISIBLE);
+            output = findViewById(R.id.tv_Rname);
+            findViewById(R.id.tv_title).setVisibility(View.INVISIBLE);
+            tvAddress = findViewById(R.id.tv_Raddress);
+            tvPhone = findViewById(R.id.tv_Rphone);
+            output.setText(restaurant.getName());
+            tvAddress.setText(restaurant.getFormattedAddress());
+            tvPhone.setText(restaurant.getFormattedPhone());
         }
     }
 
