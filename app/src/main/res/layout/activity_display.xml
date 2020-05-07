@@ -54,7 +54,19 @@
         android:textSize="25dp"
         android:autoLink="all"
         />
-
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btn_playAgain"
+        android:textColor="@android:color/holo_red_light"
+        android:textSize="25dp"
+        android:text="Play Again!"
+        app:layout_constraintTop_toBottomOf="@id/tv_Rphone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:visibility="invisible"
+        ></Button>
    
 
 </androidx.constraintlayout.widget.ConstraintLayout>

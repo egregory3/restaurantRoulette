@@ -102,7 +102,7 @@ public class DisplayActivity extends AppCompatActivity {
         protected ArrayList<Restaurant> doInBackground(String... params) {
             Uri.Builder builder = Uri.parse("https://maps.googleapis.com/maps/api/place/nearbysearch/json").buildUpon();
             builder.appendQueryParameter("location", params[2] + "," + params[3]);
-            builder.appendQueryParameter("radius", "5000");
+            builder.appendQueryParameter("radius", "3000");
             builder.appendQueryParameter("type", "restaurant");
             builder.appendQueryParameter("key", params[1]);
 
