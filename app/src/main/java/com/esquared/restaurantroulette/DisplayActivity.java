@@ -1,3 +1,4 @@
+
 package com.esquared.restaurantroulette;
 
 import androidx.annotation.Nullable;
@@ -202,13 +203,13 @@ public class DisplayActivity extends AppCompatActivity {
                         }
                     }
 
-                        jo = new JSONObject(data);
+                    jo = new JSONObject(data);
                     restaurant = jo.getJSONObject("result");
-                        r.setAddress(restaurant.get("formatted_address").toString());
-                        r.setPhone(restaurant.get("formatted_phone_number").toString());
-                        r.setRating( restaurant.getDouble("rating"));
-                        r.setPrice((int) restaurant.get("price_level"));
-                        Log.i("Restaurant", "" + r.getName() + " "+ r.getFormattedAddress() + " " + r.getLattitude() + "/" + r.getLongitude() + " " + r.getRating() + " " + r.getPrice());
+                    r.setAddress(restaurant.get("formatted_address").toString());
+                    r.setPhone(restaurant.get("formatted_phone_number").toString());
+                    r.setRating( restaurant.getDouble("rating"));
+                    r.setPrice((int) restaurant.get("price_level"));
+                    Log.i("Restaurant", "" + r.getName() + " "+ r.getFormattedAddress() + " " + r.getLattitude() + "/" + r.getLongitude() + " " + r.getRating() + " " + r.getPrice());
 
 
                 } catch (MalformedURLException e) {
