@@ -45,9 +45,9 @@ o
 ?app/src/main/java/com/esquared/restaurantroulette/TheRules.java,5/e/5eb1ac25a5d3944fb942d3fc5e935124504fcc13
 q
 Aapp/src/main/java/com/esquared/restaurantroulette/Restaurant.java,6/c/6c3487fa9ab6d8413297296f5b13455e85262a7c
-t
-Dapp/src/main/java/com/esquared/restaurantroulette/GetRestaurant.java,9/9/99a8d0dade3fa38d98e648444483aa49194dffd0
 v
 Fapp/src/main/java/com/esquared/restaurantroulette/displayActivity.java,d/0/d006056418576577646fe66e9211618c5f5f25d0
 o
 ?app/src/main/java/com/esquared/restaurantroulette/GetPrefs.java,e/b/ebdf872d8ed06f237ac1f589fc6b43c43555f835
+v
+Fapp/src/main/java/com/esquared/restaurantroulette/DisplayActivity.java,0/8/082589f1ee78f2b36a0ed1568ff8274480030c6e

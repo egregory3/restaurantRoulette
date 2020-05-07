@@ -4,14 +4,20 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 
-
+import android.location.Location;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -24,6 +30,7 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Random;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -31,19 +38,35 @@ public class DisplayActivity extends AppCompatActivity {
     Animation animation;
     ImageView animatedTV;
     ArrayList<Restaurant> restaurants;
+    private FusedLocationProviderClient client;
+    TextView output;
+    TextView tvAddress;
+    TextView tvPhone;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        String apiKey = (String) getText(R.string.places_api_key);
+        final String apiKey = (String) getText(R.string.places_api_key);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display);
         animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotateinfinite);
         animatedTV = findViewById(R.id.wheel_include);
         //using for now to pass a value to pull restaurant number #
-        String[] myparams = new String[]{String.valueOf(5), apiKey};
-        //Use GetRestaurant class to generate a restaurant
-        GetRestaurant restaurant = new GetRestaurant();
-         restaurant.execute(myparams);
+        client = LocationServices.getFusedLocationProviderClient(this);
+
+        client.getLastLocation().addOnSuccessListener(DisplayActivity.this, new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+                if(location != null) {
+                    String latitude = String.valueOf(location.getLatitude());
+                    String longitude = String.valueOf(location.getLongitude());
+                    Log.i("Location", latitude + "/" + longitude);
+                    String[] myparams = new String[]{String.valueOf(5), apiKey, latitude, longitude};
+                    //Use GetRestaurant class to generate a restaurant
+                    GetRestaurant restaurant = new GetRestaurant();
+                    restaurant.execute(myparams);
+                }
+            }
+        });
     }
 
     @Override
@@ -75,8 +98,12 @@ public class DisplayActivity extends AppCompatActivity {
 
         @Override
         protected ArrayList<Restaurant> doInBackground(String... params) {
-            Uri.Builder builder = Uri.parse("https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=-33.8670522,151.1957362&radius=1500&type=restaurant").buildUpon();
+            Uri.Builder builder = Uri.parse("https://maps.googleapis.com/maps/api/place/nearbysearch/json").buildUpon();
+            builder.appendQueryParameter("location", params[2] + "," + params[3]);
+            builder.appendQueryParameter("radius", "1500");
+            builder.appendQueryParameter("type", "restaurant");
             builder.appendQueryParameter("key", params[1]);
+
 
 
             try {
@@ -197,9 +224,25 @@ public class DisplayActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(ArrayList<Restaurant> restaurants) {
+            Restaurant restaurant = new Restaurant();
             super.onPostExecute(restaurants);
+            boolean isOpen = false;
+            while(isOpen == false) {
+                Integer random = new Random().nextInt(20);
+                restaurant = restaurants.get(random);
+                Log.i("Restaurant", restaurant.getName());
+                isOpen = restaurant.getOpenNow();
+            }
 
             animatedTV.clearAnimation();
+            animatedTV.setVisibility(View.INVISIBLE);
+            output = findViewById(R.id.tv_Rname);
+            findViewById(R.id.tv_title).setVisibility(View.INVISIBLE);
+            tvAddress = findViewById(R.id.tv_Raddress);
+            tvPhone = findViewById(R.id.tv_Rphone);
+            output.setText(restaurant.getName());
+            tvAddress.setText(restaurant.getFormattedAddress());
+            tvPhone.setText(restaurant.getFormattedPhone());
         }
     }
 
