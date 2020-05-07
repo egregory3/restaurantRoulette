@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 
+import android.content.Intent;
 import android.location.Location;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -101,7 +102,7 @@ public class DisplayActivity extends AppCompatActivity {
         protected ArrayList<Restaurant> doInBackground(String... params) {
             Uri.Builder builder = Uri.parse("https://maps.googleapis.com/maps/api/place/nearbysearch/json").buildUpon();
             builder.appendQueryParameter("location", params[2] + "," + params[3]);
-            builder.appendQueryParameter("radius", "1500");
+            builder.appendQueryParameter("radius", "5000");
             builder.appendQueryParameter("type", "restaurant");
             builder.appendQueryParameter("key", params[1]);
 
@@ -244,6 +245,15 @@ public class DisplayActivity extends AppCompatActivity {
             output.setText(restaurant.getName());
             tvAddress.setText(restaurant.getFormattedAddress());
             tvPhone.setText(restaurant.getFormattedPhone());
+            findViewById(R.id.btn_playAgain).setVisibility(View.VISIBLE);
+            findViewById(R.id.btn_playAgain).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getApplicationContext(), DisplayActivity.class);
+                    startActivity(intent);
+                }
+            });
+
         }
     }
 
